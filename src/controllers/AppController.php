@@ -12,6 +12,9 @@ final class AppController {
             case 'home':
                 $this->home();
                 break;
+            case 'games':
+                $this->games();
+                break;
             default:
                 // Implement logic...
         }
@@ -19,7 +22,11 @@ final class AppController {
 
     private function render(string $view, array $data): void{
         extract($data);
+        // Header
+        require __DIR__ . '/../../views/partials/header.php';
         require __DIR__ . '/../../views/pages/' . $view . '.php';
+        // Footer
+        require __DIR__ . '/../../views/partials/footer.php';
     }
 
     private function home() : void{
@@ -31,6 +38,18 @@ final class AppController {
         $this->render('home', [
             'featuredGames' => $featuredGames,
             'total' => count($games)
+        ]);
+    }
+
+    private function games(): void{
+        $games = getAllGames();
+
+        usort($games, function($a, $b){
+            return $b['rating'] <=> $a['rating'];
+        });
+
+        $this->render('games', [
+            'games' => $games
         ]);
     }
 }
