@@ -16,11 +16,12 @@ final class AppController {
                 $this->games();
                 break;
             default:
-                // Implement logic...
+                $this->notFound();
+                break;
         }
     }
 
-    private function render(string $view, array $data): void{
+    private function render(string $view, array $data = []): void{
         extract($data);
         // Header
         require __DIR__ . '/../../views/partials/header.php';
@@ -41,7 +42,7 @@ final class AppController {
         ]);
     }
 
-    private function games(): void{
+    private function games() : void{
         $games = getAllGames();
 
         usort($games, function($a, $b){
@@ -51,5 +52,9 @@ final class AppController {
         $this->render('games', [
             'games' => $games
         ]);
+    }
+
+    private function notFound() : void{
+        $this->render('not-found');
     }
 }
