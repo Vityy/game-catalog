@@ -1,22 +1,26 @@
 <?php
 
+require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../repositories/GamesRepository.php';
+
+function gameRepository() : GamesRepository{
+    return new GamesRepository(db());
+}
+
 function getAllGames() : array{
-    // 1. Path jusqu'aux jeux.
-    $path = __DIR__ . '/../../data/games.json';
+    return gameRepository()->findAll();
+}
 
-    // 2. Lire le fichier.
-    $json = file_get_contents($path);
+function getAllGamesSortedByRating() : array{
+    return gameRepository()->findAllSortedByRating();
+}
 
-    // 3. Décoder le JSON pour récupérer un tableau de jeux.
-    if($json === false){
-        return [];
-    }
-    else{
-        $data = json_decode($json, true);
-    }
+function getLimitedGames(int $id) : array{
+    return gameRepository()->findTop($id);
+}
 
-    // 4. Retourner les jeux.
-    return is_array($data) ? $data : [];
+function countAll() : int{
+    return gameRepository()->countAll();
 }
 
 function getGameById(int $id) : ?array{

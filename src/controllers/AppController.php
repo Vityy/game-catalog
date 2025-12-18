@@ -34,25 +34,20 @@ final class AppController {
     }
 
     private function home() : void{
-        // 1. Récupérer les 3 jeux.
-        $games = getAllGames();
-        $featuredGames = array_slice($games, 0, 3);
+//        $games = getAllGames();
+        $games = getLimitedGames(7);
 
         http_response_code(200);
 
-        // 2. Rendre la vue.
         $this->render('home', [
-            'featuredGames' => $featuredGames,
-            'total' => count($games)
+            'featuredGames' => $games,
+//            'total' => count($games)
+            'total' => countAll()
         ]);
     }
 
     private function games() : void{
-        $games = getAllGames();
-
-        usort($games, function($a, $b){
-            return $b['rating'] <=> $a['rating'];
-        });
+        $games = getAllGamesSortedByRating();
 
         http_response_code(200);
 

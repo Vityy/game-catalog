@@ -4,12 +4,24 @@ readonly final class GamesRepository{
     public function __construct(private readonly PDO $pdo){}
 
     public function findAllSortedByRating() : array{
-        $sql = $this->pdo->prepare("SELECT * FROM games ORDER BY rating DESC");
+        $sql = $this->pdo->query("SELECT * FROM games ORDER BY rating DESC");
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function findAll() : array{
-        $sql = $this->pdo->prepare("SELECT * FROM games");
+        $sql = $this->pdo->query("SELECT * FROM games");
         return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findTop(int $limit) : array{
+        $sql = $this->pdo->prepare("SELECT * FROM games ORDER BY id LIMIT :limit");
+        $sql->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $sql->execute();
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countAll() : int{
+        $sql = $this->pdo->query("SELECT COUNT(*) FROM games");
+        return $sql->fetchColumn();
     }
 }
