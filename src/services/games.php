@@ -32,5 +32,7 @@ function getGameById(int $id) : ?array{
 //
 //    return null;
 
-    return array_find(getAllGames(), fn($gameById) => (int)($gameById['id'] ?? 0) === $id);
+//    return array_find(getAllGames(), fn($gameById) => (int)($gameById['id'] ?? 0) === $id);
+
+    return gameRepository()->getGameById($id);
 }

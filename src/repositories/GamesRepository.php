@@ -24,4 +24,11 @@ readonly final class GamesRepository{
         $sql = $this->pdo->query("SELECT COUNT(*) FROM games");
         return $sql->fetchColumn();
     }
+
+    public function getGameById(int $id) : array {
+        $sqm = $this->pdo->prepare("SELECT * FROM games WHERE id = :id");
+        $sqm->bindValue(':id', $id, PDO::PARAM_INT);
+        $sqm->execute();
+        return $sqm->fetch(PDO::FETCH_ASSOC);
+    }
 }
