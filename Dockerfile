@@ -1,39 +1,16 @@
-services:
-  php:
-    build: .
-    container_name: game_php
-    ports:
-      - "8000:80"
-    volumes:
-      - .:/var/www/html
-    depends_on:
-      - mysql
+FROM php:8.5-apache
  
-  mysql:
-    image: mysql:8.0
-    container_name: game_mysql
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_DATABASE: game_catalog
-      MYSQL_USER: app
-      MYSQL_PASSWORD: app
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
+# Installer les extensions nécessaires
+RUN docker-php-ext-install pdo pdo_mysql
  
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: game_phpmyadmin
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-    ports:
-      - "8080:80"
-    depends_on:
-      - mysql
+# Activer mod_rewrite (utile pour plus tard)
+RUN a2enmod rewrite
  
-volumes:
-  mysql_data:
+# Définir le dossier public
+WORKDIR /var/www/html
+ 
+# Copier le projet dans le container
+COPY . /var/www/html
+ 
+# Droits (important sous Windows)
+RUN chown -R www-data:www-data /var/www/html

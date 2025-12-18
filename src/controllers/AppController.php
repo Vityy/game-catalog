@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../helpers/games.php';
+require_once __DIR__ . '/../services/games.php';
 require_once __DIR__ . '/../helpers/debug.php';
 
 final class AppController {
