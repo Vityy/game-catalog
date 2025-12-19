@@ -1,5 +1,7 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+
 require_once __DIR__ . '/../services/games.php';
 require_once __DIR__ . '/../helpers/debug.php';
 
@@ -20,7 +22,7 @@ final class AppController {
                 $this->games();
                 break;
             case '/random':
-                $this->random();
+                $this->getRandom();
                 break;
             default:
                 $this->notFound();
@@ -38,14 +40,12 @@ final class AppController {
     }
 
     private function home() : void{
-//        $games = getAllGames();
         $games = getLimitedGames(3);
 
         http_response_code(200);
 
         $this->render('home', [
             'featuredGames' => $games,
-//            'total' => count($games)
             'total' => countAll()
         ]);
     }
@@ -71,15 +71,12 @@ final class AppController {
         ]);
     }
 
-    private function random(): void{
+    #[NoReturn]
+    private function getRandom(): void{
         $game = getRandomGame();
 
-        http_response_code(200);
-
-        $this->render('detail', [
-            'id' => $game['id'],
-            'game' => $game
-        ]);
+        header('Location: /games/' . $game['id']);
+        die();
     }
 
     private function notFound() : void{
