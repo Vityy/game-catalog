@@ -1,5 +1,4 @@
 <?php
-//    $games = $games ?? [];
     $games ??= []; // possible shortcut
 ?>
 

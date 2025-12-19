@@ -208,3 +208,7 @@ h1 {
 .add-error{
     color: red;
 }
+
+.success-title{
+    color: green;
+}

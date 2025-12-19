@@ -60,10 +60,13 @@ final class AppController {
 
     private function gameById(int $id) : void{
         $game = getGameById($id);
+        $success = $_SESSION['flash_success'] ?? '';
+        unset($_SESSION['flash_success']);
 
         $this->render('detail', [
             'id' => $id,
-            'game' => $game
+            'game' => $game,
+            'success' => $success
         ]);
     }
 
@@ -132,18 +135,10 @@ final class AppController {
             $this->render('add', ['old' => $old, 'errors' => $errors], 422);
             return;
         }
-        
-//        $newGameId = createGame([
-//            'title' => $title,
-//            'platform' => $platform,
-//            'genre' => $genre,
-//            'releaseYear' => $releaseYear,
-//            'rating' => $rating,
-//            'description' => $description,
-//            'notes' => $notes
-//        ]);
 
         $newGameId = createGame($old);
+
+        $_SESSION['flash_success'] = 'Game added successfully';
         
         header('Location: /games/' . $newGameId, true, 302);
         exit;
