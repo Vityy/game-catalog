@@ -22,7 +22,7 @@ final class AppController {
                 $this->games();
                 break;
             case '/random':
-                $this->getRandom();
+                $this->random();
                 break;
             default:
                 $this->notFound();
@@ -72,19 +72,19 @@ final class AppController {
     }
 
     #[NoReturn]
-    private function getRandom(): void{
-        $game = getRandomGame();
-        $previousGameId = 0;
+    private function random(): void{
+        $lastId = $_SESSION['last_random_id'] ?? 0;
+        $game = null;
 
-        if(isset($_COOKIE['gameId'])){
-            $previousGameId = $_COOKIE['gameId'];
+        for($i = 0; $i < 5; $i++){
+            $candidate = getRandomGame();
+
+            if($candidate['id'] !== $lastId){
+                $game = $candidate;
+            }
         }
 
-        while($game['id'] === $previousGameId){
-            $game = getRandomGame();
-        }
-
-        setcookie('gameId', $game['id'], time() + 3600*24*30, "/");
+        $_SESSION['last_random_id'] = $game['id'];
 
         header('Location: /games/' . $game['id']);
         die();

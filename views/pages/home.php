@@ -5,7 +5,7 @@ $total = $total ?? 0;
 
 <h1>Game Catalog</h1>
 <p class="sub">Home — featuring <?= count($games) ?> games.</p>
-<a class="nav__link" href="/random">Jeu au hasard</a>
+<a class="nav__link" href="/random">🎲 Random game</a>
 
 <br>
 <br>

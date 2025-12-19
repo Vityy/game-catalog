@@ -90,7 +90,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 6px 0 var(--shadow);
     position: relative;
-    bottom: -15px;
+    bottom: -20px;
 
     &:hover{
         color: red;
