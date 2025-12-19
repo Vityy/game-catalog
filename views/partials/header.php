@@ -11,7 +11,7 @@
 <body>
 <header class="topbar">
     <div class="container topbar__inner">
-        <a href="/"><strong class="brand">Game Catalog</strong></a>
+        <a class="brand" href="/"><strong>Game Catalog</strong></a>
         <nav class="nav">
             <a class="nav__link" href="/">Home</a>
             <a class="nav__link" href="/games">Games</a>

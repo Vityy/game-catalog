@@ -47,13 +47,18 @@ body {
 }
 
 .brand {
-    letter-spacing: .5px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
     padding: 8px 10px;
     background: var(--bg);
     border: 3px solid var(--border);
     border-radius: 12px;
     box-shadow: 0 6px 0 var(--shadow);
     text-transform: uppercase;
+
+    &:hover{
+        background: darkgrey;
+    }
 }
 
 .nav {
@@ -70,6 +75,10 @@ body {
     border: 3px solid var(--border);
     border-radius: 12px;
     box-shadow: 0 6px 0 var(--shadow);
+
+    &:hover{
+        background: darkgrey;
+    }
 }
 
 .card_link {
@@ -160,7 +169,12 @@ h1 {
     }
 
     .brand {
+        text-decoration: none;
         font-size: 14px;
+
+        &:hover{
+            background: darkgrey;
+        }
     }
 }
 
