@@ -5,18 +5,19 @@ require_once __DIR__ . '/../helpers/debug.php';
 
 final class AppController {
 
-    public function handleRequest() : void{
-        $page = $_GET['page'] ?? 'home';
+    public function handleRequest(string $path) : void{
 
-        switch($page){
-            case 'home':
+        if (preg_match('#^/games/(\d+)$#', $path, $m)) {
+            $this->gameById((int)$m[1]);
+            return;
+        }
+
+        switch($path){
+            case '/':
                 $this->home();
                 break;
-            case 'games':
+            case '/games':
                 $this->games();
-                break;
-            case 'detail':
-                $this->gameById();
                 break;
             default:
                 $this->notFound();
@@ -35,7 +36,7 @@ final class AppController {
 
     private function home() : void{
 //        $games = getAllGames();
-        $games = getLimitedGames(7);
+        $games = getLimitedGames(3);
 
         http_response_code(200);
 
@@ -56,8 +57,7 @@ final class AppController {
         ]);
     }
 
-    private function gameById() : void{
-        $id = $_GET['id'] ?? 0;
+    private function gameById(int $id) : void{
         $game = getGameById($id);
 
         http_response_code(200);

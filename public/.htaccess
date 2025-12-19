@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Si fichier/dossier existe (css, images...), Apache le sert
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Sinon, on envoie tout vers index.php
+RewriteRule ^ index.php [QSA,L]
