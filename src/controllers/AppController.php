@@ -19,6 +19,9 @@ final class AppController {
             case '/games':
                 $this->games();
                 break;
+            case '/random':
+                $this->random();
+                break;
             default:
                 $this->notFound();
                 break;
@@ -64,6 +67,17 @@ final class AppController {
 
         $this->render('detail', [
             'id' => $id,
+            'game' => $game
+        ]);
+    }
+
+    private function random(): void{
+        $game = getRandomGame();
+
+        http_response_code(200);
+
+        $this->render('detail', [
+            'id' => $game['id'],
             'game' => $game
         ]);
     }

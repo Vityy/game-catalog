@@ -25,10 +25,15 @@ readonly final class GamesRepository{
         return $sql->fetchColumn();
     }
 
-    public function getGameById(int $id) : array {
-        $sqm = $this->pdo->prepare("SELECT * FROM games WHERE id = :id");
-        $sqm->bindValue(':id', $id, PDO::PARAM_INT);
-        $sqm->execute();
-        return $sqm->fetch(PDO::FETCH_ASSOC);
+    public function getGameById(int $id) : array{
+        $sql = $this->pdo->prepare("SELECT * FROM games WHERE id = :id");
+        $sql->bindValue(':id', $id, PDO::PARAM_INT);
+        $sql->execute();
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getRandomGame() : array{
+        $sql = $this->pdo->query("SELECT * FROM games ORDER BY RAND() LIMIT 1");
+        return $sql->fetch(PDO::FETCH_ASSOC);
     }
 }
