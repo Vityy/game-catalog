@@ -74,6 +74,17 @@ final class AppController {
     #[NoReturn]
     private function getRandom(): void{
         $game = getRandomGame();
+        $previousGameId = 0;
+
+        if(isset($_COOKIE['gameId'])){
+            $previousGameId = $_COOKIE['gameId'];
+        }
+
+        while($game['id'] === $previousGameId){
+            $game = getRandomGame();
+        }
+
+        setcookie('gameId', $game['id'], time() + 3600*24*30, "/");
 
         header('Location: /games/' . $game['id']);
         die();
