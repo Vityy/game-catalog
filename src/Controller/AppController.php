@@ -4,6 +4,9 @@ namespace Controller;
 
 use JetBrains\PhpStorm\NoReturn;
 use Core\Response;
+use Core\Session;
+use Core\Request;
+use Helper\Debug;
 use Repository\GamesRepository;
 
 require_once __DIR__ . '/../Helper/debug.php';
@@ -12,7 +15,9 @@ final class AppController {
 
     public function __construct(
         private readonly Response $response,
-        private GamesRepository $gamesRepository
+        private readonly GamesRepository $gamesRepository,
+        private readonly Session $session,
+        private readonly Request $request,
     ) {}
 
     public function handleRequest(string $path) : void{
@@ -60,19 +65,17 @@ final class AppController {
 
     private function gameById(int $id) : void{
         $game = $this->gamesRepository->getGameById($id);
-        $success = $_SESSION['flash_success'] ?? '';
-        unset($_SESSION['flash_success']);
 
         $this->response->render('detail', [
             'id' => $id,
             'game' => $game,
-            'success' => $success
+            'success' => $this->session->pullFlash('success')
         ]);
     }
 
     #[NoReturn]
     private function random(): void{
-        $lastId = $_SESSION['last_random_id'] ?? 0;
+        $lastId = $this->session->get('last_random_id');
         $game = null;
 
         for($i = 0; $i < 5; $i++){
@@ -83,10 +86,7 @@ final class AppController {
             }
         }
 
-        $_SESSION['last_random_id'] = $game['id'];
-
-//        header('Location: /games/' . $game['id'], true, 302);
-//        exit;
+        $this->session->set('last_random_id', $game['id']);
 
         $this->response->redirect('/games/' . $game['id']);
     }
@@ -96,7 +96,7 @@ final class AppController {
     }
 
     private function add() : void{
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if($this->request->isPost()){
             $this->handleAddGame();
             return;
         }
@@ -105,13 +105,13 @@ final class AppController {
     }
 
     private function handleAddGame() : void{
-        $title = $_POST["title"];
-        $platform = $_POST["platform"];
-        $genre = $_POST["genre"];
-        $releaseYear = $_POST["releaseYear"];
-        $rating = $_POST["rating"];
-        $description = $_POST["description"];
-        $notes = $_POST["notes"];
+        $title = trim($this->request->post("title"));   // trim sert à enlever les espaces au début et à la fin des inputs
+        $platform = trim($this->request->post("platform"));
+        $genre = trim($this->request->post("genre"));
+        $releaseYear = trim($this->request->post("releaseYear"));
+        $rating = trim($this->request->post("rating"));
+        $description = trim($this->request->post("description"));
+        $notes = trim($this->request->post("notes"));
 
         $errors = [];
 
@@ -119,9 +119,9 @@ final class AppController {
         if($platform === '') $errors['platform'] = 'Platform should not be empty';
         if($genre === '') $errors['genre'] = 'Genre should not be empty';
         if($rating < 0 || $rating > 10) $errors['rating'] = 'Rating should be between 0 and 10';
-        if($releaseYear < 1800 || $releaseYear > (int)Date('Y')) $errors['releaseYear'] = 'Release year should be between 1800 and 2025';
+        if($releaseYear < 1960 || $releaseYear > (int)Date('Y')) $errors['releaseYear'] = 'Release year should be between 1960 and 2025';
         if($description === '') $errors['description'] = 'Description should not be empty';
-        if($notes === '') $errors['notes'] = 'Notes should not be empty';
+//        if($notes === '') $errors['notes'] = 'Notes should not be empty';
 
         $old = [
             'title' => $title,
@@ -140,10 +140,7 @@ final class AppController {
 
         $newGameId = $this->gamesRepository->createGame($old);
 
-        $_SESSION['flash_success'] = 'Game added successfully';
-        
-//        header('Location: /games/' . $newGameId, true, 302);
-//        exit;
+        $this->session->flash('success', 'Game added successfully');
 
         $this->response->redirect('/games/' . $newGameId);
     }
