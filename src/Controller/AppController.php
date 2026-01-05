@@ -11,42 +11,42 @@ use Repository\GamesRepository;
 
 require_once __DIR__ . '/../Helper/debug.php';
 
-final class AppController {
+final readonly class AppController {
 
     public function __construct(
-        private readonly Response $response,
-        private readonly GamesRepository $gamesRepository,
-        private readonly Session $session,
-        private readonly Request $request,
+        private Response $response,
+        private GamesRepository $gamesRepository,
+        private Session $session,
+        private Request $request,
     ) {}
 
-    public function handleRequest(string $path) : void{
+//    public function handleRequest(string $path) : void{
+//
+//        if (preg_match('#^/games/(\d+)$#', $path, $m)) {
+//            $this->gameById((int)$m[1]);
+//            return;
+//        }
+//
+//        switch($path){
+//            case '/':
+//                $this->home();
+//                break;
+//            case '/games':
+//                $this->games();
+//                break;
+//            case '/add':
+//                $this->add();
+//                break;
+//            case '/random':
+//                $this->random();
+//                break;
+//            default:
+//                $this->notFound();
+//                break;
+//        }
+//    }
 
-        if (preg_match('#^/games/(\d+)$#', $path, $m)) {
-            $this->gameById((int)$m[1]);
-            return;
-        }
-
-        switch($path){
-            case '/':
-                $this->home();
-                break;
-            case '/games':
-                $this->games();
-                break;
-            case '/add':
-                $this->add();
-                break;
-            case '/random':
-                $this->random();
-                break;
-            default:
-                $this->notFound();
-                break;
-        }
-    }
-
-    private function home() : void{
+    public function home() : void{
         $games = $this->gamesRepository->findTop(3);
 
         $this->response->render('home', [
@@ -55,7 +55,7 @@ final class AppController {
         ]);
     }
 
-    private function games() : void{
+    public function games() : void{
         $games = $this->gamesRepository->findAllSortedByRating();
 
         $this->response->render('games', [
@@ -63,7 +63,7 @@ final class AppController {
         ]);
     }
 
-    private function gameById(int $id) : void{
+    public function gameById(int $id) : void{
         $game = $this->gamesRepository->getGameById($id);
 
         $this->response->render('detail', [
@@ -74,7 +74,7 @@ final class AppController {
     }
 
     #[NoReturn]
-    private function random(): void{
+    public function random(): void{
         $lastId = $this->session->get('last_random_id');
         $game = null;
 
@@ -91,11 +91,11 @@ final class AppController {
         $this->response->redirect('/games/' . $game['id']);
     }
 
-    private function notFound() : void{
+    public function notFound() : void{
         $this->response->render('not-found', [], 404);
     }
 
-    private function add() : void{
+    public function add() : void{
         if($this->request->isPost()){
             $this->handleAddGame();
             return;
@@ -104,7 +104,7 @@ final class AppController {
         $this->response->render('add', []);
     }
 
-    private function handleAddGame() : void{
+    public function handleAddGame() : void{
         $title = trim($this->request->post("title"));   // trim sert à enlever les espaces au début et à la fin des inputs
         $platform = trim($this->request->post("platform"));
         $genre = trim($this->request->post("genre"));

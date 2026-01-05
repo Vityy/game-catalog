@@ -9,7 +9,7 @@ final class Request {
         return is_string($path) && $path !== '' ? $path : '/';
     }
 
-    private function method(): string {
+    public function method(): string {
         return strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
     }
 
