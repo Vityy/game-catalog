@@ -50,7 +50,7 @@ readonly final class GamesRepository{
         $result = [];
 
         foreach($data as $row) {
-            $result['Rating ' . $row['rating']] = $row['total'];
+            $result[$row['rating']] = $row['total'];
         }
 
         return $result;
