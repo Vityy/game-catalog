@@ -32,7 +32,7 @@ final class Router {
             return;
         }
 
-        if($method === 'POST' && isset($this->getRoutes[$path])) {
+        if($method === 'POST' && isset($this->postRoutes[$path])) {
             $this->postRoutes[$path]($request, $response);
             return;
         }

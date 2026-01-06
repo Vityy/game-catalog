@@ -20,32 +20,6 @@ final readonly class AppController {
         private Request $request,
     ) {}
 
-//    public function handleRequest(string $path) : void{
-//
-//        if (preg_match('#^/games/(\d+)$#', $path, $m)) {
-//            $this->gameById((int)$m[1]);
-//            return;
-//        }
-//
-//        switch($path){
-//            case '/':
-//                $this->home();
-//                break;
-//            case '/games':
-//                $this->games();
-//                break;
-//            case '/add':
-//                $this->add();
-//                break;
-//            case '/random':
-//                $this->random();
-//                break;
-//            default:
-//                $this->notFound();
-//                break;
-//        }
-//    }
-
     public function home() : void{
         $games = $this->gamesRepository->findTop(3);
 
