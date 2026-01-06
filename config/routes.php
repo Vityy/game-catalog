@@ -1,11 +1,12 @@
 <?php
 
 use Controller\AppController;
+use Controller\PingApiController;
 use Core\Request;
 use Core\Response;
 use Core\Router;
 
-return function(Router $router, AppController $controller) {
+return function(Router $router, AppController $controller, PingApiController $pingApiController) {
     $router->get('/', [$controller, 'home']);
     $router->get('/add', [$controller, 'add']);
     $router->get('/games', [$controller, 'games']);
@@ -16,4 +17,6 @@ return function(Router $router, AppController $controller) {
     $router->getRegex('#^/games/(\d+)$#', function(Request $req, Response $res, array $m) use($controller) {
         $controller->gameById((int)$m[1]);
     });
+
+    $router->get('/api/ping', [$pingApiController, 'ping']);
 };

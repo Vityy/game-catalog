@@ -1,6 +1,7 @@
 <?php
 
 use Controller\AppController;
+use Controller\PingApiController;
 use Core\Database;
 use Core\Response;
 use Core\Session;
@@ -24,8 +25,9 @@ $request = new Request();
 $router = new Router();
 
 $appController = new AppController($response, $repository, $session, $request);
+$pingApiController = new PingApiController();
 
-$registerRoutes($router, $appController);
+$registerRoutes($router, $appController, $pingApiController);
 $router->dispatch($request, $response);
 
 //$appController->handleRequest($path);
