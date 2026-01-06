@@ -1,6 +1,7 @@
 <?php
 
 use Controller\AppController;
+use Controller\GameApiController;
 use Controller\PingApiController;
 use Core\Cors;
 use Core\Database;
@@ -27,8 +28,9 @@ $router = new Router();
 
 $appController = new AppController($response, $repository, $session, $request);
 $pingApiController = new PingApiController();
+$gameApiController = new GameApiController();
 
-$registerRoutes($router, $appController, $pingApiController);
+$registerRoutes($router, $appController, $pingApiController, $gameApiController, $repository);
 $router->dispatch($request, $response);
 
 //$appController->handleRequest($path);
