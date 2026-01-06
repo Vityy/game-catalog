@@ -5,9 +5,9 @@ namespace Controller;
 use Core\Request;
 use Core\Response;
 
-class PingApiController
+final class PingApiController
 {
-    public function ping(Request $request, Response $response) {
+    public function ping(Request $request, Response $response) : void {
         $response->json(['ok' => true, 'message' => 'pong']);
     }
 }

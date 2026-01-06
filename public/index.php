@@ -2,6 +2,7 @@
 
 use Controller\AppController;
 use Controller\PingApiController;
+use Core\Cors;
 use Core\Database;
 use Core\Response;
 use Core\Session;
@@ -16,7 +17,7 @@ $registerRoutes = require __DIR__ . '/../config/routes.php';
 
 $config = require_once __DIR__ . '/../config/db.php';
 
-//$path = $_SERVER['REQUEST_URI'];
+Cors::Handle();
 
 $response = new Response();
 $repository = new GamesRepository(Database::makePdo($config['db']));
