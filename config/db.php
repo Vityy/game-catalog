@@ -1,12 +1,23 @@
 <?php
 
-return [
-    'db' => [
-        'host' => 'mysql',
-        'port' => 3306,
-        'db' => 'game_catalog',
-        'user' => 'app',
-        'pass' => 'app',
-        'charset' => 'utf8mb4'
-    ]
+$config = [
+    'db' => array(
+        'host' => '',
+        'port' => null,
+        'db' => '',
+        'user' => '',
+        'pass' => '',
+        'charset' => ''
+    )
 ];
+
+$localDbFile = __DIR__ . '/db.local.php';
+
+// Vérifier qu'il existe
+if(is_file($localDbFile)) {
+    // On override db.php par un db.local.php
+    $config['db'] = array_replace($config['db'], (require $localDbFile)['db'] ?? []);
+}
+
+// On retourne la bonne config
+return $config;
