@@ -57,7 +57,7 @@ readonly final class GamesRepository{
     }
 
     public function findRecent(int $limit) : array {
-        $sql = $this->pdo->prepare("SELECT * FROM games ORDER BY rating DESC LIMIT :limit");
+        $sql = $this->pdo->prepare("SELECT * FROM games ORDER BY releaseYear DESC LIMIT :limit");
         $sql->bindValue(':limit', $limit, PDO::PARAM_INT);
         $sql->execute();
         return $sql->fetchAll(PDO::FETCH_ASSOC);
